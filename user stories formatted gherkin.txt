@@ -1,0 +1,63 @@
+Scenario: User creates ticket with LB variables
+	Given I have a legit project
+	And I have servers in the CMDB
+	Then I submit the ticket for approval
+	And I am confronted with missing information
+
+Scenario: Service-now generates JSON string with variables
+	Given the ticket created and submitted successfully
+
+Scenario: NE script maintains a local DB of requests tracked
+	Given the script will run a report on all open LB changes
+	And the script will compare the report of requests with the tracked list
+	Then add any new requests to the tracked list
+
+Scenario: NE script pulls JSON string from Service-now using snowfield
+	Given a request has become fully approved since the last tracking report
+	Then NE script will setup a cron job to implement the approved request
+	And the script will send an email to the requester giving a implementation date
+
+
+view:
+need to know the vserver names
+iterate through vservers
+	check that it exists
+	get bound servicegroup
+	get bound servers
+	get parameters for bound servicegroup
+	get vserver parameters
+	get servers bound to servicegroup
+
+
+add:
+reserve new VIP
+add a-record (URL) to ipam if not GSLB
+add CNAME (URL) to ipam if GSLB
+iterate through devices:
+	add cs-vs if content switch
+	iterate through vservers:
+		add vserver 
+		add servicegroup
+		iterate through servers
+			add servers
+		iterate through monitors
+			add monitors
+		bind vserver to cs-vs if content switch
+		bind servicegroup to vserver
+		bind servers to servicegroup
+		bind monitors to servicegroup
+
+
+delete:
+need to know the vserver names
+iterate through devices:
+	iterate through vservers
+		check that it exists
+		get bound servicegroup
+		get bound servers
+		get servers bound to servicegroup
+		delete servicegroup
+		delete vserver
+		delete servers
+		delete monitors
+
